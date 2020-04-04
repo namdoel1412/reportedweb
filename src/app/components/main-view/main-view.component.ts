@@ -1,0 +1,786 @@
+import { Component, OnInit } from '@angular/core';
+import { Chart } from 'node_modules/chart.js';
+import { RealRevenueService } from './../../services/real-revenue.service';
+
+@Component({
+  selector: 'app-main-view',
+  templateUrl: './main-view.component.html',
+  styleUrls: ['./main-view.component.css']
+})
+export class MainViewComponent implements OnInit {
+
+  constructor(private _realRevenue: RealRevenueService) { }
+
+
+  ngOnInit(): void {
+
+    this._realRevenue.GetAllNhomSP((status, data) => {
+      console.log('call api');
+      if (status) {
+        this.nhomSP = data;
+      }
+      else {
+        console.log('Error to get NhomSP');
+      }
+    })
+    for (let i = 0; i < 12; i++) {
+      this.lstActiveMonths.push(false);
+      this.lstActiveChiNhanh.push(false);
+      this.lstActiveHeThong.push(false);
+      this.lstActiveCuaHang.push(false);
+      this.lstActiveKenh.push(false);
+      this.lstActiveNhomSP.push(false);
+      this.lstActiveNhanVien.push(false);
+    }
+
+    //dougnut chart 2;
+    let ctx_2 = document.getElementById('dougnutchart_2');
+    this.dougnutChart2 = new Chart(ctx_2, {
+      type: 'doughnut',
+      data: {
+        labels: ['Doanh thu bán hàng theo kế hoạch', 'Doanh thu bán hàng năm nay'],
+        datasets: [{
+          label: '# of Votes',
+          data: [50, 50],
+          backgroundColor: [
+            'rgb(255,205,86, 1)',
+            'rgba(54, 162, 235, 1)'
+          ],
+          borderColor: [
+            'rgb(255,205,86, 1)',
+            'rgba(54, 162, 235, 1)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true
+            }
+          }]
+        }
+      }
+    });
+
+    //dougnut chart 1;
+    let ctx = document.getElementById('myChart');
+    this.myChart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Doanh thu bán hàng năm trước', 'Doanh thu bán hàng năm nay'],
+        datasets: [{
+          label: '# of Votes',
+          data: [50, 50],
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.9)',
+            'rgba(54, 162, 235, 0.9)'
+          ],
+          borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true
+            }
+          }]
+        }
+      }
+    });
+
+    //polarArea chart 1;
+    let polarArea = document.getElementById('polarAreachart');
+    this.polarAreaChart = new Chart(polarArea, {
+      type: 'polarArea',
+      data: {
+        labels: ['ELLENTRANG', 'DOMINO', "BENTONI"],
+        datasets: [{
+          label: '# of Votes',
+          data: [20, 35, 50],
+          backgroundColor: [
+            'rgba(63, 81, 181,0.8)',
+            'rgba(244, 67, 54,0.8)',
+            'rgba(0, 188, 212,0.8)'
+          ],
+          borderColor: [
+            'rgba(63, 81, 181,1.0)',
+            'rgba(244, 67, 54,1.0)',
+            'rgba(0, 188, 212,1.0)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true
+            }
+          }]
+        }
+      }
+    });
+
+    //polarArea chart 2;
+    let polarArea_2 = document.getElementById('polarAreachart_2');
+    this.polarAreaChart_2 = new Chart(polarArea_2, {
+      type: 'polarArea',
+      data: {
+        labels: ['ELLENTRANG', "DOMINO", 'BENTONI'],
+        datasets: [{
+          label: '# of Votes',
+          data: [50, 20, 35],
+          backgroundColor: [
+            'rgba(63, 81, 181,0.8)',
+            'rgba(244, 67, 54,0.8)',
+            'rgba(0, 188, 212,0.8)'
+          ],
+          borderColor: [
+            'rgba(63, 81, 181,1.0)',
+            'rgba(244, 67, 54,1.0)',
+            'rgba(0, 188, 212,1.0)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true
+            }
+          }]
+        }
+      }
+    });
+
+    // Horizone Chart 1
+    let horizontalBar = document.getElementById('horizontalBarChart')
+    this.horizontalBarChart = new Chart(horizontalBar, {
+      type: 'horizontalBar',
+      data: {
+        labels: ['SP1', 'SP2', "SP3", "SP4", "SP5", "SP6", "SP7", "SP8", "SP9", "SP10"],
+        datasets: [{
+          label: 'Top 10 sản phẩm',
+          data: [50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
+          backgroundColor: [
+            'rgba(33, 150, 243, 0.9)',
+            'rgba(33, 150, 243, 0.9)',
+            'rgba(33, 150, 243, 0.9)',
+            'rgba(33, 150, 243, 0.9)',
+            'rgba(33, 150, 243, 0.9)',
+            'rgba(33, 150, 243, 0.9)',
+            'rgba(33, 150, 243, 0.9)',
+            'rgba(33, 150, 243, 0.9)',
+            'rgba(33, 150, 243, 0.9)',
+            'rgba(33, 150, 243, 0.9)'
+          ],
+          borderColor: [
+            'rgba(33, 150, 243, 1)',
+            'rgba(33, 150, 243, 1)',
+            'rgba(33, 150, 243, 1)',
+            'rgba(33, 150, 243, 1)',
+            'rgba(33, 150, 243, 1)',
+            'rgba(33, 150, 243, 1)',
+            'rgba(33, 150, 243, 1)',
+            'rgba(33, 150, 243, 1)',
+            'rgba(33, 150, 243, 1)',
+            'rgba(33, 150, 243, 1)'
+          ],
+          borderWidth: 1
+        }],
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true
+              }
+            }]
+          }
+        }
+      }
+    });
+    // Mixed Chart
+    let mixed = document.getElementById('mixedChart')
+    this.mixedChart = new Chart(mixed, {
+      type: 'bar',
+      data: {
+        datasets: [{
+          label: 'Khách hàng',
+          data: [100, 200, 300, 400, 200, 300, 400, 200, 300, 400, 200, 300],
+          // this dataset is drawn below
+          order: 1,
+          backgroundColor: [
+            'rgba(33, 150, 243, 0.9)',
+            'rgba(33, 150, 243, 0.9)',
+            'rgba(33, 150, 243, 0.9)',
+            'rgba(33, 150, 243, 0.9)',
+            'rgba(33, 150, 243, 0.9)',
+            'rgba(33, 150, 243, 0.9)',
+            'rgba(33, 150, 243, 0.9)',
+            'rgba(33, 150, 243, 0.9)',
+            'rgba(33, 150, 243, 0.9)',
+            'rgba(33, 150, 243, 0.9)',
+            'rgba(33, 150, 243, 0.9)',
+            'rgba(33, 150, 243, 0.9)'
+          ],
+          borderColor: [
+            'rgba(33, 150, 243, 1)',
+            'rgba(33, 150, 243, 1)',
+            'rgba(33, 150, 243, 1)',
+            'rgba(33, 150, 243, 1)',
+            'rgba(33, 150, 243, 1)',
+            'rgba(33, 150, 243, 1)',
+            'rgba(33, 150, 243, 1)',
+            'rgba(33, 150, 243, 1)',
+            'rgba(33, 150, 243, 1)',
+            'rgba(33, 150, 243, 1)',
+            'rgba(33, 150, 243, 1)',
+            'rgba(33, 150, 243, 1)'
+          ],
+          borderWidth: 1
+        }, {
+          label: 'Số đơn hàng',
+          type: "line",
+          borderColor: "#F44336",
+          data: [133, 221, 783, 2478, 133, 221, 783, 2478, 133, 221, 783, 2478],
+          fill: false,
+          // this dataset is drawn on top
+          borderWidth: 2
+        }],
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+      },
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true
+            }
+          }]
+        }
+      }
+    });
+
+    // Horizone Chart 2
+    let horizontalBar_2 = document.getElementById('horizontalBarChart_2')
+    this.horizontalBarChart_2 = new Chart(horizontalBar_2, {
+      type: 'horizontalBar',
+      data: {
+        labels: ['Online', 'Bán lẻ', "Bán buôn"],
+        datasets: [{
+          label: 'Năm trước',
+          data: [50, 50, 50],
+          backgroundColor: [
+            'rgba(255, 152, 0, 0.9)',
+            'rgba(255, 152, 0,0.9)',
+            'rgba(255, 152, 0,0.9)'
+          ],
+          borderColor: [
+            'rgba(255, 152, 0,1.0)',
+            'rgba(255, 152, 0,1.0)',
+            'rgba(255, 152, 0,1.0)'
+          ],
+          borderWidth: 1
+        },
+        {
+          label: 'Năm nay',
+          data: [50, 50, 50],
+          backgroundColor: [
+            'rgba(33, 150, 243, 0.9)',
+            'rgba(33, 150, 243, 0.9)',
+            'rgba(33, 150, 243, 0.9)'
+          ],
+          borderColor: [
+            'rgba(33, 150, 243, 1)',
+            'rgba(33, 150, 243, 1)',
+            'rgba(33, 150, 243, 1)'
+          ],
+          borderWidth: 1
+        }
+        ],
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true
+              }
+            }]
+          }
+        }
+      }
+    });
+
+    // Horizone Chart 3
+    let horizontalBar_3 = document.getElementById('horizontalBarChart_3')
+    this.horizontalBarChart_3 = new Chart(horizontalBar_3, {
+      type: 'horizontalBar',
+      data: {
+        labels: ['SP1', 'SP2'],
+        datasets: [{
+          label: 'Doanh thu bán hàng',
+          data: [50, 50, 50],
+          backgroundColor: [
+            'rgba(33, 150, 243, 0.9)',
+            'rgba(33, 150, 243, 0.9)',
+            'rgba(33, 150, 243, 0.9)',
+            'rgba(33, 150, 243, 0.9)',
+            'rgba(33, 150, 243, 0.9)',
+            'rgba(33, 150, 243, 0.9)',
+            'rgba(33, 150, 243, 0.9)',
+            'rgba(33, 150, 243, 0.9)',
+            'rgba(33, 150, 243, 0.9)',
+            'rgba(33, 150, 243, 0.9)'
+          ],
+          borderColor: [
+            'rgba(33, 150, 243, 1)',
+            'rgba(33, 150, 243, 1)',
+            'rgba(33, 150, 243, 1)',
+            'rgba(33, 150, 243, 1)',
+            'rgba(33, 150, 243, 1)',
+            'rgba(33, 150, 243, 1)',
+            'rgba(33, 150, 243, 1)',
+            'rgba(33, 150, 243, 1)',
+            'rgba(33, 150, 243, 1)',
+            'rgba(33, 150, 243, 1)'
+          ],
+          borderWidth: 1
+        }],
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true
+              }
+            }]
+          }
+        }
+      }
+    });
+  }
+
+  public years: string[] = ["2018", "2019", "2020"];
+  public months: string[] = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
+  public chiNhanh: string[] = ["Hà Nội"];
+  public heThong: string[] = ["DOMINO", "BENTONI", "ELLENTRANG"];
+  public cuaHang: string[] = ["CÁT LINH", "HÀNG BÔNG", "KIM MÃ", "CẦU GIẤY", "ELLENTRANG"];
+  public kenh: string[] = ["Bán buôn", "Bán lẻ", "Online"];
+  public nhomSP: any[] = [];
+  public nhanVien: string[] = [];
+  public tieuDe: any[] = [
+    { maTieuDe: "Chietkhau", tenTieuDe: "Chiết khấu" },
+    { maTieuDe: "Doanhthubanhang", tenTieuDe: "Doanh thu bán hàng" },
+    { maTieuDe: "Doanhthuthuan", tenTieuDe: "Doanh thu thuần" },
+    { maTieuDe: "Tralai", tenTieuDe: "Trả lại" }];
+  public toggle = true;
+  public active: any = 0;
+  public lstActiveMonths: boolean[] = new Array;
+  public lstActiveChiNhanh: boolean[] = new Array;
+  public lstActiveHeThong: boolean[] = new Array;
+  public lstActiveCuaHang: boolean[] = new Array;
+  public lstActiveKenh: boolean[] = new Array;
+  public lstActiveNhomSP: boolean[] = new Array;
+  public lstActiveNhanVien: boolean[] = new Array;
+  public activeTieuDe: any = 0;
+
+  // Chart's Detail
+  public recentYearData: any = 50;
+  public lastYearData: any = 50;
+  public sumInPlanRevenue: any = 50;
+  public recentYearDataInPolar: any[] =
+    [
+      {
+        hethong: "ELLENTRANG",
+        tong: 50
+      },
+      {
+        hethong: "DOMINO",
+        tong: 50
+      },
+      {
+        hethong: "BENTOLI",
+        tong: 50
+      }
+    ]
+  public lastYearDataInPolar: any[] = [
+    {
+      hethong: "ELLENTRANG",
+      tong: 50
+    },
+    {
+      hethong: "DOMINO",
+      tong: 50
+    },
+    {
+      hethong: "BENTOLI",
+      tong: 50
+    }
+  ];
+
+  // Dataset in Chart
+  public myChart: any;
+  public dougnutChart2: any;
+  public polarAreaChart: any;
+  public polarAreaChart_2: any;
+  public mixedChart: any;
+  public horizontalBarChart: any;
+  public horizontalBarChart_2: any;
+  public horizontalBarChart_3: any;
+
+  //Middleware
+  public formatter = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' });
+
+
+  //FUNC
+  public toggleBoolean(item, i) {
+    if (item === 'nam') {
+      this.active = i;
+    }
+    if (item === 'tieude') {
+      this.activeTieuDe = i;
+    }
+  }
+  public chooseProp(value, i) {
+    if (value === 'months') {
+      this.lstActiveMonths[i] = !this.lstActiveMonths[i];
+    }
+    if (value === 'chinhanh') {
+      this.lstActiveChiNhanh[i] = !this.lstActiveChiNhanh[i];
+    }
+    if (value === 'hethong') {
+      this.lstActiveHeThong[i] = !this.lstActiveHeThong[i];
+    }
+    if (value === 'kenh') {
+      this.lstActiveKenh[i] = !this.lstActiveKenh[i];
+    }
+    if (value === 'nhomsp') {
+      this.lstActiveNhomSP[i] = !this.lstActiveNhomSP[i];
+    }
+    if (value === 'nhanvien') {
+      this.lstActiveNhanVien[i] = !this.lstActiveNhanVien[i];
+    }
+    if (value === 'cuahang') {
+      this.lstActiveCuaHang[i] = !this.lstActiveCuaHang[i];
+    }
+  }
+
+  public ShowData() {
+    let allActive = document.getElementsByTagName('ul');
+    let inputFilter = {};
+    for (let i = 0; i < allActive.length; i++) {
+      //console.log(allActive[i].innerHTML);
+      let activeProp = allActive[i].getElementsByClassName('active');
+      let arrayFilter = [];
+      if (i === 0) {
+        inputFilter['nam'] = parseInt(activeProp[0].innerHTML);
+      }
+      else if (i === 1) {
+        let thangActive = [];
+        for (let j = 0; j < activeProp.length; j++) {
+          thangActive.push(parseInt(activeProp[j].innerHTML));
+        }
+        inputFilter['thang'] = thangActive;
+      }
+      else if (i === 2) {
+        let chiNhanhActive = [];
+        for (let j = 0; j < activeProp.length; j++) {
+          chiNhanhActive.push(parseInt(activeProp[j].innerHTML));
+        }
+        inputFilter['machinhanh'] = ["HN"];
+      }
+      else if (i === 3) {
+        let heThongActive = [];
+        for (let j = 0; j < activeProp.length; j++) {
+          heThongActive.push(activeProp[j].innerHTML.trim());
+        }
+        inputFilter['hethong'] = heThongActive;
+      }
+      else if (i === 4) {
+        let cuaHangActive = [];
+        for (let j = 0; j < activeProp.length; j++) {
+          cuaHangActive.push(activeProp[j].innerHTML.trim());
+        }
+        inputFilter['macuahang'] = cuaHangActive;
+      }
+      else if (i === 5) {
+        let kenhBanHangActive = [];
+        for (let j = 0; j < activeProp.length; j++) {
+          console.log(activeProp[j].innerHTML);
+          if (activeProp[j].innerHTML.trim() === "Bán buôn") {
+            kenhBanHangActive.push('ban buon');
+          }
+          else if (activeProp[j].innerHTML.trim() === "Bán lẻ") {
+            kenhBanHangActive.push('ban le');
+          }
+          else {
+            kenhBanHangActive.push('online');
+          }
+        }
+        inputFilter['kenhbanhang'] = kenhBanHangActive;
+      }
+      else if (i === 6) {
+        let maNhomActive = [];
+        for (let j = 0; j < activeProp.length; j++) {
+          for (let k = 0; k < this.nhomSP.length; k++) {
+            if (activeProp[j].innerHTML.trim() === this.nhomSP[k].tensanpham.trim()) {
+              maNhomActive.push(this.nhomSP[k].manhomsp);
+            }
+          }
+        }
+        inputFilter['manhom'] = maNhomActive;
+      }
+      else if (i === 7) {
+        // Nhan vien
+      }
+      else {
+        let tmp = activeProp[0].innerHTML.trim();
+        console.log(tmp);
+        //console.log(activeProp[0].innerHTML.trim());
+        let pre: string;
+        for (let k = 0; k < this.tieuDe.length; k++) {
+          //if()
+          if (this.tieuDe[k].tenTieuDe === tmp) {
+            inputFilter['tieude'] = this.tieuDe[k].maTieuDe;
+            console.log(this.tieuDe[k].maTieuDe);
+            break;
+          }
+        }
+      }
+    }
+    // Recent year data
+    // polar chart
+    this.getSumRecentYear(inputFilter);
+    this.getSpecificStoresWithTitle(inputFilter, this.polarAreaChart, 1);
+    this.getSumInPlanRevenue(inputFilter);
+    this.GetCountedOrders(inputFilter);
+    this.GetCountedCustomers(inputFilter);
+    this.GetTopTenProductsWithTitle(inputFilter);
+    this.GetSumGroupByChannel(inputFilter, 1);
+    this.GetTopTenStoresWithTitle(inputFilter);
+
+    let inputFilter_2 = inputFilter;
+    inputFilter_2['nam'] = inputFilter['nam'] - 1;
+
+    // Last year data
+    this.getSumLastYear(inputFilter_2);
+    this.getSpecificStoresWithTitle(inputFilter_2, this.polarAreaChart_2, 2);
+    this.GetSumGroupByChannel(inputFilter_2, 0);
+  }
+
+  public getSumRecentYear(inputFilter) {
+    this._realRevenue.GetRealRevenue(inputFilter, (status, data) => {
+      if (status) {
+        console.log(data);
+        this.recentYearData = data;
+        this.myChart.data.datasets[0].data[1] = data;
+        this.dougnutChart2.data.datasets[0].data[1] = data;
+        this.myChart.update();
+        this.dougnutChart2.update();
+      }
+      else {
+        console.log('Error to set recentYearData = data');
+      }
+    })
+  }
+
+  public getSumLastYear(inputFilter) {
+    this._realRevenue.GetRealRevenue(inputFilter, (status, data) => {
+      if (status) {
+        console.log(data);
+        this.lastYearData = data;
+        this.myChart.data.datasets[0].data[0] = data;
+        this.myChart.update();
+      }
+      else {
+        console.log('Error to set lastYearData = data');
+      }
+    })
+  }
+
+  public getSumInPlanRevenue(inputFilter) {
+    let except = {};
+    except['nam'] = inputFilter['nam'];
+    except['thang'] = inputFilter['thang'];
+    except['machinhanh'] = inputFilter['machinhanh'];
+    except['tieude'] = inputFilter['tieude'];
+    except['hethong'] = inputFilter['hethong'];
+    except['macuahang'] = inputFilter['macuahang'];
+    except['kenhbanhang'] = inputFilter['kenhbanhang'];
+    this._realRevenue.GetSumInPlanRevenue(except, (status, data) => {
+      if (status) {
+        console.log(data);
+        this.sumInPlanRevenue = data;
+        this.dougnutChart2.data.datasets[0].data[0] = data;
+        this.dougnutChart2.update();
+      }
+      else {
+        console.log('Error to set lastYearData = data');
+      }
+    })
+  }
+
+
+  public getSpecificStoresWithTitle(inputFilter, chart, index) {
+    let except = {};
+    except['nam'] = inputFilter['nam'];
+    except['thang'] = inputFilter['thang'];
+    except['machinhanh'] = inputFilter['machinhanh'];
+    except['tieude'] = inputFilter['tieude'];
+    this._realRevenue.GetSpecificStoresWithTitle(except, (status, data) => {
+      if (status) {
+        if (index === 1) {
+          this.recentYearDataInPolar = data;
+        }
+        else {
+          this.lastYearDataInPolar = data;
+        }
+        for (let j = 0; j < data.length; j++) {
+          //console.log("Oki");
+          chart.data.labels[j] = data[j].hethong;
+          chart.data.datasets[0].data[j] = data[j].tong;
+        }
+        console.log("Compare VVVVVV____2");
+        console.log(this.recentYearDataInPolar);
+        console.log(this.lastYearDataInPolar);
+        //console.log(this.recentYearDataInPolar);
+        console.log("/////2/////");
+        //this.lastYearData = data;
+        chart.update();
+      }
+      else {
+        console.log('Error to getSpecificStoresWithTitle ');
+      }
+    })
+  }
+
+  // Orders and Customers
+  public GetCountedOrders(inputFilter) {
+    let except = {};
+    except['nam'] = inputFilter['nam'];
+    except['machinhanh'] = inputFilter['machinhanh'];
+    except['hethong'] = inputFilter['hethong'];
+    except['macuahang'] = inputFilter['macuahang'];
+    except['kenhbanhang'] = inputFilter['kenhbanhang'];
+    except['manhom'] = inputFilter['manhom'];
+    this._realRevenue.GetCountedOrders(except, (status, data) => {
+      if (status) {
+        console.log(data);
+        for (let j = 0; j < data.length; j++) {
+          this.mixedChart.data.datasets[1].data[j] = data[j].counted;
+        }
+        this.mixedChart.update();
+      }
+      else {
+        console.log("Error to set data to mixedChart");
+      }
+    })
+  }
+
+  public GetCountedCustomers(inputFilter) {
+    let except = {};
+    except['nam'] = inputFilter['nam'];
+    except['machinhanh'] = inputFilter['machinhanh'];
+    except['hethong'] = inputFilter['hethong'];
+    except['macuahang'] = inputFilter['macuahang'];
+    except['kenhbanhang'] = inputFilter['kenhbanhang'];
+    except['manhom'] = inputFilter['manhom'];
+    this._realRevenue.GetCountedCustomers(except, (status, data) => {
+      if (status) {
+        console.log(data);
+        for (let j = 0; j < data.length; j++) {
+          this.mixedChart.data.datasets[0].data[j] = data[j].counted;
+        }
+        this.mixedChart.update();
+      }
+      else {
+        console.log("Error to set data to mixedChart");
+      }
+    })
+  }
+
+  public GetTopTenProductsWithTitle(inputFilter) {
+    let except = {};
+    except['nam'] = inputFilter['nam'];
+    except['machinhanh'] = inputFilter['machinhanh'];
+    except['hethong'] = inputFilter['hethong'];
+    except['macuahang'] = inputFilter['macuahang'];
+    except['kenhbanhang'] = inputFilter['kenhbanhang'];
+    except['manhom'] = inputFilter['manhom'];
+    except['tieude'] = inputFilter['tieude'];
+
+    this._realRevenue.GetTopTenProductsWithTitle(except, (status, data) => {
+      if (status) {
+        console.log(data);
+        this.horizontalBarChart.data.datasets[0].label = "Top 10 sản phẩm theo " + except['tieude'];
+        for (let j = 0; j < data.length; j++) {
+          this.horizontalBarChart.data.labels[j] = data[j].tensanpham;
+          this.horizontalBarChart.data.datasets[0].data[j] = data[j].tong;
+        }
+        this.horizontalBarChart.update();
+      }
+      else {
+        console.log("Error to set data to horizontalBarChart");
+      }
+    })
+  }
+
+  public GetSumGroupByChannel(inputFilter, index) {
+    let except = {};
+    except['nam'] = inputFilter['nam'];
+    except['machinhanh'] = inputFilter['machinhanh'];
+    except['thang'] = inputFilter['thang'];
+    except['hethong'] = inputFilter['hethong'];
+    except['macuahang'] = inputFilter['macuahang'];
+    except['manhom'] = inputFilter['manhom'];
+    except['tieude'] = inputFilter['tieude'];
+
+    this._realRevenue.GetSumGroupByChannel(except, (status, data) => {
+      if (status) {
+        console.log(data);
+        for (let j = 0; j < data.length; j++) {
+          this.horizontalBarChart_2.data.labels[j] = data[j].kenhbanhang;
+          this.horizontalBarChart_2.data.datasets[index].data[j] = data[j].tong;
+        }
+        this.horizontalBarChart_2.update();
+      }
+      else {
+        console.log("Error to set data to horizontalBarChart_2");
+      }
+    })
+  }
+
+  public GetTopTenStoresWithTitle(inputFilter) {
+    let except = {};
+    except['nam'] = inputFilter['nam'];
+    except['machinhanh'] = inputFilter['machinhanh'];
+    except['hethong'] = inputFilter['hethong'];
+    except['macuahang'] = inputFilter['macuahang'];
+    except['kenhbanhang'] = inputFilter['kenhbanhang'];
+    except['manhom'] = inputFilter['manhom'];
+    except['tieude'] = inputFilter['tieude'];
+
+    this._realRevenue.GetTopTenStoresWithTitle(except, (status, data) => {
+      if (status) {
+        console.log(data);
+        this.horizontalBarChart_3.reset();
+        this.horizontalBarChart_3.data.datasets[0].label = except['tieude'];
+        for (let j = 0; j < data.length; j++) {
+          // lstMacuahang.push(data[j].macuahang);
+          // lstTong.push(data[j].tong);
+          this.horizontalBarChart_3.data.labels[j] = data[j].macuahang;
+          this.horizontalBarChart_3.data.datasets[0].data[j] = data[j].tong;
+        }
+        this.horizontalBarChart_3.update();
+      }
+      else {
+        console.log("Error to set data to horizontalBarChart_3");
+      }
+    })
+  }
+}

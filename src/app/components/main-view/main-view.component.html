@@ -1,0 +1,158 @@
+<div class="overview">
+  <div class="main-view">
+    <div class="years">
+      <div class="title-main-view">Năm</div>
+      <div class="content-main-view">
+        <ul class="ul-years">
+          <li *ngFor="let item of years; let i = index" (click)="toggleBoolean('nam', i)"
+            [ngClass]="active === i ? 'active' : ''">
+            {{item}}
+          </li>
+        </ul>
+      </div>
+    </div>
+    <hr>
+    <div class="months">
+      <div class="title-main-view">Tháng</div>
+      <div class="content-main-view">
+        <ul class="ul-months">
+          <li *ngFor="let item of months; let i = index" (click)="chooseProp('months', i)"
+            [ngClass]="lstActiveMonths[i] === true ? 'active' : ''">
+            {{item}}
+          </li>
+        </ul>
+      </div>
+    </div>
+    <hr>
+    <div class="chiNhanh">
+      <div class="title-main-view">Chi nhánh</div>
+      <div class="content-main-view">
+        <ul class="ul-chinhanh">
+          <li *ngFor="let item of chiNhanh; let i = index" (click)="chooseProp('chinhanh', i)"
+            [ngClass]="lstActiveChiNhanh[i] === true ? 'active' : ''">
+            {{item}}
+          </li>
+        </ul>
+      </div>
+    </div>
+    <hr>
+    <div class="heThong">
+      <div class="title-main-view">Hệ thống</div>
+      <div class="content-main-view">
+        <ul class="ul-hethong">
+          <li *ngFor="let item of heThong; let i = index" (click)="chooseProp('hethong', i)"
+            [ngClass]="lstActiveHeThong[i] === true ? 'active' : ''">
+            {{item}}
+          </li>
+        </ul>
+      </div>
+    </div>
+    <hr>
+    <div class="cuaHang">
+      <div class="title-main-view">Cửa hàng</div>
+      <div class="content-main-view">
+        <ul class="ul-cuahang">
+          <li *ngFor="let item of cuaHang; let i = index" (click)="chooseProp('cuahang', i)"
+            [ngClass]="lstActiveCuaHang[i] === true ? 'active' : ''">
+            {{item}}
+          </li>
+        </ul>
+      </div>
+    </div>
+    <hr>
+    <div class="kenh">
+      <div class="title-main-view">Kênh</div>
+      <div class="content-main-view">
+        <ul class="ul-kenh">
+          <li *ngFor="let item of kenh; let i = index" (click)="chooseProp('kenh', i)"
+            [ngClass]="lstActiveKenh[i] === true ? 'active' : ''">
+            {{item}}
+          </li>
+        </ul>
+      </div>
+    </div>
+    <hr>
+    <div class="nhomSP">
+      <div class="title-main-view">Nhóm SP</div>
+      <div class="content-main-view">
+        <ul class="ul-nhomsp">
+          <li *ngFor="let item of nhomSP; let i = index" (click)="chooseProp('nhomsp', i)"
+            [ngClass]="lstActiveNhomSP[i] === true ? 'active' : ''">
+            {{item.tennhomsp}}
+          </li>
+        </ul>
+      </div>
+    </div>
+    <hr>
+    <div class="nhanVien">
+      <div class="title-main-view">Nhân viên</div>
+      <div class="content-main-view">
+        <ul class="ul-nhanvien">
+          <li *ngFor="let item of nhanVien; let i = index" (click)="chooseProp('nhanvien', i)"
+            [ngClass]="lstActiveNhanVien[i] === true ? 'active' : ''">
+            {{item}}
+          </li>
+        </ul>
+      </div>
+    </div>
+    <hr>
+    <div class="tieuDe">
+      <div class="title-main-view">Tiêu đề</div>
+      <div class="content-main-view">
+        <ul class="ul-tieude">
+          <li *ngFor="let item of tieuDe; let i = index;" (click)="toggleBoolean('tieude', i)"
+            [ngClass]=" activeTieuDe === i ? 'active' : ''">
+            {{item.tenTieuDe}}
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <button mat-stroked-button style="margin-left: 40px; margin-bottom: 50px;" (click) = "ShowData()">Lấy dữ liệu</button>
+    </div>
+  </div>
+  <div class="chart-show">
+    <div class="dougnut-chart" >
+      <canvas id="myChart"></canvas>
+      <div class="detail-info">
+        <p>{{(recentYearData - lastYearData) > 0 ? 'Tăng' : 'Giảm'}} {{formatter.format(recentYearData - lastYearData)}} so với năm trước </p>
+        <p>{{(recentYearData - lastYearData) > 0 ? 'Tăng' : 'Giảm'}} {{((recentYearData - lastYearData)*1.00/(recentYearData + lastYearData)*1.00 * 100).toFixed(2)}}% so với năm trước </p>
+      </div>
+    </div>
+    <div class="dougnut-chart" >
+      <canvas id="dougnutchart_2"></canvas>
+      <div class="detail-info">
+        <p>{{(recentYearData - sumInPlanRevenue) > 0 ? 'Tăng' : 'Giảm'}} {{formatter.format(recentYearData - sumInPlanRevenue)}} so với kế hoạch </p>
+        <p>{{(recentYearData - sumInPlanRevenue) > 0 ? 'Tăng' : 'Giảm'}} {{((recentYearData - sumInPlanRevenue)*1.00/(recentYearData + sumInPlanRevenue)*1.00 * 100).toFixed(2)}}% so với kế hoạch </p>
+      </div>
+    </div>
+    <div class="polarArea-chart">
+      <canvas id="polarAreachart"></canvas>
+      <div class="detail-info">
+        <p>{{recentYearDataInPolar[0]?.hethong}} : {{formatter.format(recentYearDataInPolar[0]?.tong)}} ({{((recentYearDataInPolar[0]?.tong*1.00)/(recentYearDataInPolar[0]?.tong + recentYearDataInPolar[1].tong+ recentYearDataInPolar[2]?.tong)*100).toFixed(2)}}) %</p>
+        <p>{{recentYearDataInPolar[1]?.hethong}} : {{formatter.format(recentYearDataInPolar[1]?.tong)}} ({{((recentYearDataInPolar[1]?.tong*1.00)/(recentYearDataInPolar[0]?.tong + recentYearDataInPolar[1].tong+ recentYearDataInPolar[2]?.tong)*100).toFixed(2)}}) %</p>
+        <p>{{recentYearDataInPolar[2]?.hethong}} : {{formatter.format(recentYearDataInPolar[2]?.tong)}} ({{((recentYearDataInPolar[2]?.tong*1.00)/(recentYearDataInPolar[0]?.tong + recentYearDataInPolar[1].tong+ recentYearDataInPolar[2]?.tong)*100).toFixed(2)}}) %</p>
+      </div>
+    </div>
+    <div class="polarArea-chart">
+      <canvas id="polarAreachart_2"></canvas>
+      <div class="detail-info">
+        <p>{{lastYearDataInPolar[0]?.hethong}} : {{formatter.format(lastYearDataInPolar[0]?.tong)}} ({{((lastYearDataInPolar[0]?.tong*1.00)/(lastYearDataInPolar[0]?.tong + lastYearDataInPolar[1]?.tong+ lastYearDataInPolar[2]?.tong)*100).toFixed(2)}}) %</p>
+        <p>{{lastYearDataInPolar[1]?.hethong}} : {{formatter.format(lastYearDataInPolar[1]?.tong)}} ({{((lastYearDataInPolar[1]?.tong*1.00)/(lastYearDataInPolar[0]?.tong + lastYearDataInPolar[1]?.tong+ lastYearDataInPolar[2]?.tong)*100).toFixed(2)}}) %</p>
+        <p>{{lastYearDataInPolar[2]?.hethong}} : {{formatter.format(lastYearDataInPolar[2]?.tong)}} ({{((lastYearDataInPolar[2]?.tong*1.00)/(lastYearDataInPolar[0]?.tong + lastYearDataInPolar[1]?.tong+ lastYearDataInPolar[2]?.tong)*100).toFixed(2)}}) %</p>
+      </div>
+    </div>
+    <div class="mixed-chart">
+      <canvas id="mixedChart"></canvas>
+    </div>
+    <div class="horizontalBar-chart">
+      <canvas id="horizontalBarChart"></canvas>
+    </div>
+    <div class="horizontalBar-chart">
+      <canvas id="horizontalBarChart_2"></canvas>
+    </div>
+    <div class="horizontalBar-chart">
+      <canvas id="horizontalBarChart_3"></canvas>
+    </div>
+  </div>
+</div>
