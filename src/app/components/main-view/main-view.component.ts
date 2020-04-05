@@ -276,7 +276,7 @@ export class MainViewComponent implements OnInit {
         labels: ['Online', 'Bán lẻ', "Bán buôn"],
         datasets: [{
           label: 'Năm trước',
-          data: [50, 50, 50],
+          data: [0, 0, 0],
           backgroundColor: [
             'rgba(255, 152, 0, 0.9)',
             'rgba(255, 152, 0,0.9)',
@@ -470,7 +470,7 @@ export class MainViewComponent implements OnInit {
     }
   }
 
-  public ShowData() {
+  public async ShowData() {
     let allActive = document.getElementsByTagName('ul');
     let inputFilter = {};
     for (let i = 0; i < allActive.length; i++) {
@@ -555,26 +555,38 @@ export class MainViewComponent implements OnInit {
     }
     // Recent year data
     // polar chart
-    this.getSumRecentYear(inputFilter);
-    this.getSpecificStoresWithTitle(inputFilter, this.polarAreaChart, 1);
-    this.getSumInPlanRevenue(inputFilter);
-    this.GetCountedOrders(inputFilter);
-    this.GetCountedCustomers(inputFilter);
-    this.GetTopTenProductsWithTitle(inputFilter);
-    this.GetSumGroupByChannel(inputFilter, 1);
-    this.GetTopTenStoresWithTitle(inputFilter);
+    await this.getSumRecentYear(inputFilter);
+    await this.getSumInPlanRevenue(inputFilter);
+    await this.getSumLastYear(inputFilter);
+    await this.GetTopTenProductsWithTitle(inputFilter);
+    await this.GetTopTenStoresWithTitle(inputFilter);
+    await this.GetCountedOrders(inputFilter);
+    await this.GetCountedCustomers(inputFilter);
+    await this.GetSumGroupByChannel(inputFilter, 1);
+    await this.getSpecificStoresWithTitle(inputFilter, this.polarAreaChart, 1);
 
-    let inputFilter_2 = inputFilter;
+    let inputFilter_2 = {};
+
     inputFilter_2['nam'] = inputFilter['nam'] - 1;
+    inputFilter_2['thang'] = inputFilter['thang'];
+    inputFilter_2['machinhanh'] = inputFilter['machinhanh'];
+    inputFilter_2['tieude'] = inputFilter['tieude'];
+    inputFilter_2['hethong'] = inputFilter['hethong'];
+    inputFilter_2['macuahang'] = inputFilter['macuahang'];
+    inputFilter_2['kenhbanhang'] = inputFilter['kenhbanhang'];
+    inputFilter_2['manhom'] = inputFilter['manhom'];
 
     // Last year data
-    this.getSumLastYear(inputFilter_2);
-    this.getSpecificStoresWithTitle(inputFilter_2, this.polarAreaChart_2, 2);
-    this.GetSumGroupByChannel(inputFilter_2, 0);
+    await this.getSpecificStoresWithTitle(inputFilter_2, this.polarAreaChart_2, 2);
+    await this.GetSumGroupByChannel(inputFilter_2, 0);
+    console.log("InputFilter data");
+    console.log(inputFilter);
+    console.log(inputFilter_2);
+    
   }
 
-  public getSumRecentYear(inputFilter) {
-    this._realRevenue.GetRealRevenue(inputFilter, (status, data) => {
+  public async getSumRecentYear(inputFilter) {
+    await this._realRevenue.GetRealRevenue(inputFilter, (status, data) => {
       if (status) {
         console.log(data);
         this.recentYearData = data;
@@ -587,10 +599,22 @@ export class MainViewComponent implements OnInit {
         console.log('Error to set recentYearData = data');
       }
     })
+    console.log('NamDDD');
   }
 
-  public getSumLastYear(inputFilter) {
-    this._realRevenue.GetRealRevenue(inputFilter, (status, data) => {
+  public async getSumLastYear(inputFilter) {
+    let except = {};
+    except['nam'] = inputFilter['nam'] - 1;
+    except['thang'] = inputFilter['thang'];
+    except['machinhanh'] = inputFilter['machinhanh'];
+    except['tieude'] = inputFilter['tieude'];
+    except['hethong'] = inputFilter['hethong'];
+    except['macuahang'] = inputFilter['macuahang'];
+    except['kenhbanhang'] = inputFilter['kenhbanhang'];
+    except['manhom'] = inputFilter['manhom'];
+    //console.log(input);
+    //console.log(inputFilter);
+    await this._realRevenue.GetRealRevenue(except, (status, data) => {
       if (status) {
         console.log(data);
         this.lastYearData = data;
@@ -601,18 +625,12 @@ export class MainViewComponent implements OnInit {
         console.log('Error to set lastYearData = data');
       }
     })
+    console.log('NamDDD');
   }
 
-  public getSumInPlanRevenue(inputFilter) {
-    let except = {};
-    except['nam'] = inputFilter['nam'];
-    except['thang'] = inputFilter['thang'];
-    except['machinhanh'] = inputFilter['machinhanh'];
-    except['tieude'] = inputFilter['tieude'];
-    except['hethong'] = inputFilter['hethong'];
-    except['macuahang'] = inputFilter['macuahang'];
-    except['kenhbanhang'] = inputFilter['kenhbanhang'];
-    this._realRevenue.GetSumInPlanRevenue(except, (status, data) => {
+  public async getSumInPlanRevenue(inputFilter) {
+    
+    await this._realRevenue.GetSumInPlanRevenue(inputFilter, (status, data) => {
       if (status) {
         console.log(data);
         this.sumInPlanRevenue = data;
@@ -623,16 +641,17 @@ export class MainViewComponent implements OnInit {
         console.log('Error to set lastYearData = data');
       }
     })
+    console.log('NamDDD');
   }
 
 
-  public getSpecificStoresWithTitle(inputFilter, chart, index) {
+  public async getSpecificStoresWithTitle(inputFilter, chart, index) {
     let except = {};
     except['nam'] = inputFilter['nam'];
     except['thang'] = inputFilter['thang'];
     except['machinhanh'] = inputFilter['machinhanh'];
     except['tieude'] = inputFilter['tieude'];
-    this._realRevenue.GetSpecificStoresWithTitle(except, (status, data) => {
+    await this._realRevenue.GetSpecificStoresWithTitle(except, (status, data) => {
       if (status) {
         if (index === 1) {
           this.recentYearDataInPolar = data;
@@ -642,8 +661,8 @@ export class MainViewComponent implements OnInit {
         }
         for (let j = 0; j < data.length; j++) {
           //console.log("Oki");
-          chart.data.labels[j] = data[j].hethong;
-          chart.data.datasets[0].data[j] = data[j].tong;
+          chart.data.labels[j] = data[j]?.hethong;
+          chart.data.datasets[0].data[j] = data[j]?.tong;
         }
         console.log("Compare VVVVVV____2");
         console.log(this.recentYearDataInPolar);
@@ -657,10 +676,11 @@ export class MainViewComponent implements OnInit {
         console.log('Error to getSpecificStoresWithTitle ');
       }
     })
+    console.log('NamDDD');
   }
 
   // Orders and Customers
-  public GetCountedOrders(inputFilter) {
+  public async GetCountedOrders(inputFilter) {
     let except = {};
     except['nam'] = inputFilter['nam'];
     except['machinhanh'] = inputFilter['machinhanh'];
@@ -668,11 +688,11 @@ export class MainViewComponent implements OnInit {
     except['macuahang'] = inputFilter['macuahang'];
     except['kenhbanhang'] = inputFilter['kenhbanhang'];
     except['manhom'] = inputFilter['manhom'];
-    this._realRevenue.GetCountedOrders(except, (status, data) => {
+    await this._realRevenue.GetCountedOrders(except, (status, data) => {
       if (status) {
         console.log(data);
         for (let j = 0; j < data.length; j++) {
-          this.mixedChart.data.datasets[1].data[j] = data[j].counted;
+          this.mixedChart.data.datasets[1].data[j] = data[j]?.counted;
         }
         this.mixedChart.update();
       }
@@ -680,9 +700,10 @@ export class MainViewComponent implements OnInit {
         console.log("Error to set data to mixedChart");
       }
     })
+    console.log('NamDDD');
   }
 
-  public GetCountedCustomers(inputFilter) {
+  public async GetCountedCustomers(inputFilter) {
     let except = {};
     except['nam'] = inputFilter['nam'];
     except['machinhanh'] = inputFilter['machinhanh'];
@@ -690,11 +711,11 @@ export class MainViewComponent implements OnInit {
     except['macuahang'] = inputFilter['macuahang'];
     except['kenhbanhang'] = inputFilter['kenhbanhang'];
     except['manhom'] = inputFilter['manhom'];
-    this._realRevenue.GetCountedCustomers(except, (status, data) => {
+    await this._realRevenue.GetCountedCustomers(except, (status, data) => {
       if (status) {
         console.log(data);
         for (let j = 0; j < data.length; j++) {
-          this.mixedChart.data.datasets[0].data[j] = data[j].counted;
+          this.mixedChart.data.datasets[0].data[j] = data[j]?.counted;
         }
         this.mixedChart.update();
       }
@@ -702,9 +723,10 @@ export class MainViewComponent implements OnInit {
         console.log("Error to set data to mixedChart");
       }
     })
+    console.log('NamDDD');
   }
 
-  public GetTopTenProductsWithTitle(inputFilter) {
+  public async GetTopTenProductsWithTitle(inputFilter) {
     let except = {};
     except['nam'] = inputFilter['nam'];
     except['machinhanh'] = inputFilter['machinhanh'];
@@ -714,13 +736,13 @@ export class MainViewComponent implements OnInit {
     except['manhom'] = inputFilter['manhom'];
     except['tieude'] = inputFilter['tieude'];
 
-    this._realRevenue.GetTopTenProductsWithTitle(except, (status, data) => {
+    await this._realRevenue.GetTopTenProductsWithTitle(except, (status, data) => {
       if (status) {
         console.log(data);
         this.horizontalBarChart.data.datasets[0].label = "Top 10 sản phẩm theo " + except['tieude'];
         for (let j = 0; j < data.length; j++) {
-          this.horizontalBarChart.data.labels[j] = data[j].tensanpham;
-          this.horizontalBarChart.data.datasets[0].data[j] = data[j].tong;
+          this.horizontalBarChart.data.labels[j] = data[j]?.tensanpham;
+          this.horizontalBarChart.data.datasets[0].data[j] = data[j]?.tong;
         }
         this.horizontalBarChart.update();
       }
@@ -728,24 +750,27 @@ export class MainViewComponent implements OnInit {
         console.log("Error to set data to horizontalBarChart");
       }
     })
+    console.log('NamDDD');
   }
 
-  public GetSumGroupByChannel(inputFilter, index) {
-    let except = {};
-    except['nam'] = inputFilter['nam'];
-    except['machinhanh'] = inputFilter['machinhanh'];
-    except['thang'] = inputFilter['thang'];
-    except['hethong'] = inputFilter['hethong'];
-    except['macuahang'] = inputFilter['macuahang'];
-    except['manhom'] = inputFilter['manhom'];
-    except['tieude'] = inputFilter['tieude'];
-
-    this._realRevenue.GetSumGroupByChannel(except, (status, data) => {
+  public async GetSumGroupByChannel(inputFilter, index) {
+    // let except = {};
+    // except['nam'] = inputFilter['nam'];
+    // except['machinhanh'] = inputFilter['machinhanh'];
+    // except['thang'] = inputFilter['thang'];
+    // except['hethong'] = inputFilter['hethong'];
+    // except['macuahang'] = inputFilter['macuahang'];
+    // except['manhom'] = inputFilter['manhom'];
+    // except['tieude'] = inputFilter['tieude'];
+    // except['kenhbanhang'] = inputFilter['kenhbanhang'];
+    //console.log(except);
+    console.log(inputFilter);
+    await this._realRevenue.GetSumGroupByChannel(inputFilter, (status, data) => {
       if (status) {
         console.log(data);
         for (let j = 0; j < data.length; j++) {
-          this.horizontalBarChart_2.data.labels[j] = data[j].kenhbanhang;
-          this.horizontalBarChart_2.data.datasets[index].data[j] = data[j].tong;
+          this.horizontalBarChart_2.data.labels[j] = data[j]?.kenhbanhang;
+          this.horizontalBarChart_2.data.datasets[index].data[j] = data[j]?.tong;
         }
         this.horizontalBarChart_2.update();
       }
@@ -753,9 +778,10 @@ export class MainViewComponent implements OnInit {
         console.log("Error to set data to horizontalBarChart_2");
       }
     })
+    console.log('NamDDD');
   }
 
-  public GetTopTenStoresWithTitle(inputFilter) {
+  public async GetTopTenStoresWithTitle(inputFilter) {
     let except = {};
     except['nam'] = inputFilter['nam'];
     except['machinhanh'] = inputFilter['machinhanh'];
@@ -765,7 +791,7 @@ export class MainViewComponent implements OnInit {
     except['manhom'] = inputFilter['manhom'];
     except['tieude'] = inputFilter['tieude'];
 
-    this._realRevenue.GetTopTenStoresWithTitle(except, (status, data) => {
+    await this._realRevenue.GetTopTenStoresWithTitle(except, (status, data) => {
       if (status) {
         console.log(data);
         this.horizontalBarChart_3.reset();
@@ -773,8 +799,8 @@ export class MainViewComponent implements OnInit {
         for (let j = 0; j < data.length; j++) {
           // lstMacuahang.push(data[j].macuahang);
           // lstTong.push(data[j].tong);
-          this.horizontalBarChart_3.data.labels[j] = data[j].macuahang;
-          this.horizontalBarChart_3.data.datasets[0].data[j] = data[j].tong;
+          this.horizontalBarChart_3.data.labels[j] = data[j]?.macuahang;
+          this.horizontalBarChart_3.data.datasets[0].data[j] = data[j]?.tong;
         }
         this.horizontalBarChart_3.update();
       }
@@ -782,5 +808,6 @@ export class MainViewComponent implements OnInit {
         console.log("Error to set data to horizontalBarChart_3");
       }
     })
+    console.log('NamDDD');
   }
 }

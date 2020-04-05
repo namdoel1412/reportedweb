@@ -10,7 +10,7 @@ export class RealRevenueService {
 
   constructor(private _http : HttpClient) { }
 
-  public GetRealRevenue(body, onFinish){
+  public async GetRealRevenue(body, onFinish){
     //console.log(body);
     this._http.post(ROOT + 'RealRevenue/GetSumWithTitle', body).subscribe(
       (data) => {
@@ -22,7 +22,7 @@ export class RealRevenueService {
     )
   }
 
-  public GetSumInPlanRevenue(body, onFinish){
+  public async GetSumInPlanRevenue(body, onFinish){
     this._http.post(ROOT + "PlanRevenue/GetSumWithTitle", body).subscribe(
       (data) => {
         onFinish(true, data);
@@ -33,7 +33,7 @@ export class RealRevenueService {
     )
   }
 
-  public GetAllNhomSP(onFinish){
+  public async GetAllNhomSP(onFinish){
     this._http.get(ROOT + "DoanhThuThucTe/GetAllNhomSp").subscribe(
       (data) => {
         onFinish(true, data);
@@ -44,7 +44,7 @@ export class RealRevenueService {
     )
   }
 
-  public GetSpecificStoresWithTitle(body, onFinish){
+  public async GetSpecificStoresWithTitle(body, onFinish){
     this._http.post(ROOT + "RealRevenue/GetSpecificStoresWithTitle", body).subscribe(
       (data) => {
         onFinish(true, data);
@@ -55,7 +55,7 @@ export class RealRevenueService {
     )
   }
 
-  public GetCountedOrders(body, onFinish){
+  public async GetCountedOrders(body, onFinish){
     this._http.post(ROOT + "RealRevenue/GetCountedOrders", body).subscribe(
       (data) => {
         onFinish(true, data);
@@ -66,7 +66,7 @@ export class RealRevenueService {
     )
   }
 
-  public GetCountedCustomers(body, onFinish){
+  public async GetCountedCustomers(body, onFinish){
     this._http.post(ROOT + "RealRevenue/GetCountedCustomers", body).subscribe(
       (data) => {
         onFinish(true, data);
@@ -77,7 +77,7 @@ export class RealRevenueService {
     )
   }
 
-  public GetTopTenStoresWithTitle(body, onFinish){
+  public async GetTopTenStoresWithTitle(body, onFinish){
     this._http.post(ROOT + "RealRevenue/GetTopTenStoresWithTitle", body).subscribe(
       (data) => {
         onFinish(true, data);
@@ -88,7 +88,7 @@ export class RealRevenueService {
     )
   }
 
-  public GetTopTenProductsWithTitle(body, onFinish){
+  public async GetTopTenProductsWithTitle(body, onFinish){
     this._http.post(ROOT + "RealRevenue/GetTopTenProductsWithTitle", body).subscribe(
       (data) => {
         onFinish(true, data);
@@ -99,7 +99,7 @@ export class RealRevenueService {
     )
   }
 
-  public GetSumGroupByChannel(body, onFinish){
+  public async GetSumGroupByChannel(body, onFinish){
     this._http.post(ROOT + "RealRevenue/GetSumGroupByChannel", body).subscribe(
       (data) => {
         onFinish(true, data);
