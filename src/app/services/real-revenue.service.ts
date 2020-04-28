@@ -10,6 +10,40 @@ export class RealRevenueService {
 
   constructor(private _http : HttpClient) { }
 
+  public async GetAnimalGif(tag, callback){
+    const api_key = "tFRbsHuniqaspFjPiWPs2YJfRPrfXUVQ";
+    const endpoints = `https://api.giphy.com/v1/gifs/random?api_key=${api_key}&tag=${tag}`
+    this._http.get(endpoints).subscribe(
+      (data) => {
+        callback(true, data);
+        return data;
+      },
+      (err) => {
+        callback(err, err);
+      }
+    )
+  }
+
+  public async GetAnimalGif_3(tag) : Promise<any>{
+    const api_key = "tFRbsHuniqaspFjPiWPs2YJfRPrfXUVQ";
+    const endpoints = `https://api.giphy.com/v1/gifs/random?api_key=${api_key}&tag=${tag}`
+    return new Promise((resolve, reject) => {
+      this._http.get(endpoints).subscribe(
+      (data) => {
+        resolve(data);
+      }
+    )
+    })
+  }
+
+  public async GetAnimalGif_2(tag){
+    const api_key = "tFRbsHuniqaspFjPiWPs2YJfRPrfXUVQ";
+    const endpoints = `https://api.giphy.com/v1/gifs/random?api_key=${api_key}&tag=${tag}`
+    return fetch(endpoints).then(
+      data => data.json()
+    )
+  }
+
   public async GetRealRevenue(body, onFinish){
     //console.log(body);
     this._http.post(ROOT + 'RealRevenue/GetSumWithTitle', body).subscribe(

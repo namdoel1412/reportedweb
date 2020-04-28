@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Chart } from 'node_modules/chart.js';
 import { RealRevenueService } from './../../services/real-revenue.service';
+import { stringify } from 'querystring';
 
 @Component({
   selector: 'app-main-view',
@@ -13,7 +14,8 @@ export class MainViewComponent implements OnInit {
 
 
   ngOnInit(): void {
-
+    this.logInfo();
+    this.ClickMe();
     this._realRevenue.GetAllNhomSP((status, data) => {
       console.log('call api');
       if (status) {
@@ -365,6 +367,306 @@ export class MainViewComponent implements OnInit {
     });
   }
 
+  public testAsync() {
+    // let tmp : any;
+    // const test = this._realRevenue.GetAllNhomSP((state, response) => {
+    //   if(state){
+    //     tmp = response;
+    //     console.log("Data in running : " + tmp);
+    //   }
+    //   else{
+    //     console.log("ERR");
+    //   }
+    // })
+    // console.log("Data after running : " + tmp);
+    // setTimeout(() => {
+    //   console.log("Data after 0ms : " + tmp);
+    // }, 0);
+    // setTimeout(() => {
+    //   console.log("Data after 5000ms : " + tmp);
+    // }, 5000);
+    return "Hi i'm Nam";
+  }
+  public aboutAge() {
+    const response = this.testAsync();
+    console.log(response);
+    return response + ". I'm 21 years old";
+  }
+
+  public aboutGender() {
+    const response = this.aboutAge();
+    let tmp2: any;
+    const tmp = this._realRevenue.GetAllNhomSP((state, response) => {
+      if (state) {
+        console.log(response);
+        tmp2 = response;
+      }
+      else {
+        console.log("ERR_2");
+      }
+    })
+    console.log(response);
+    console.log(tmp2);
+    return response + ". Men";
+  }
+
+  public async loop10000Times() {
+    for (let i = 0; i < 2000; i++) {
+      console.log("NamDD");
+    }
+    console.log("Hehe");
+    // console.log("Before call api");
+    // const tmp = this._realRevenue.GetAllNhomSP((state, response) => {
+    //   if(state){
+    //     console.log(response);
+    //     //tmp2 = response;
+    //     return response
+    //   }
+    //   else{
+    //     console.log("ERR_2");
+    //   }
+    // })
+    // console.log("After call api");
+  }
+
+  public GetAll(callback, tmp) {
+    callback();
+    tmp();
+  }
+
+
+
+  public async logInfo() {
+    // console.log("NamDD");
+    // const tmp = this.GetAll(this.loop10000Times, () => {
+    //   console.log("That Ok");
+    // });
+    // console.log(tmp);
+    // // for(let i = 0 ; i < 2000; i++){
+    // //   console.log("NamDD_2");
+    // // }
+    // for(let i = 0 ; i < 1500; i++){
+    //   console.log("NamDD_3");
+    // }
+    // console.log(this.aboutGender())
+    // setTimeout(() => {console.log("setTimeOut after loop")}, 0);
+
+    console.log('Before Promise');
+    let t = new Promise((resolve, err) => {
+      resolve('Hello');
+    })
+    t.then((data) => {
+      return data + " NamDD.";
+    })
+      .then((data) => {
+        return data + " how are you?";
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+
+    console.log('After Promise');
+    // this.loop10000Times();
+
+    //Callback
+
+  }
+
+  public async ClickMe() {
+    // this._realRevenue.GetAnimalGif('dog', (status, response) => {
+    //   if(status){
+    //     document.getElementById('dog').setAttribute('src', response.data.image_url);
+    //     this._realRevenue.GetAnimalGif('cat', (status, responseFromCallBack) => {
+    //       if(status){
+    //         document.getElementById('cat').setAttribute('src', responseFromCallBack.data.image_url);
+    //       }
+    //       this._realRevenue.GetAnimalGif('pig', (status, responseFromCallBack) => {
+    //         if(status){
+    //           document.getElementById('pig').setAttribute('src', responseFromCallBack.data.image_url);
+    //         }
+    //       })
+    //     })
+    //   }
+    // })
+
+    // this._realRevenue.GetAnimalGif('dog' ,(state, callback) => {
+    //   if(state){
+    //     //console.log(callback);
+    //     document.getElementById('dog').setAttribute('src', callback.data.image_url);
+    //   }
+    // });
+    // this._realRevenue.GetAnimalGif('cat' ,(state, callback) => {
+    //   if(state){
+    //     //console.log(callback);
+    //     document.getElementById('cat').setAttribute('src', callback.data.image_url);
+    //   }
+    // });
+    // this._realRevenue.GetAnimalGif('pig' ,(state, callback) => {
+    //   if(state){
+    //     //console.log(callback);
+    //     document.getElementById('pig').setAttribute('src', callback.data.image_url);
+    //   }
+    // });
+
+    // Promise Chaining
+    // this._realRevenue.GetAnimalGif_2('dog')
+    // .then(
+    //   (data) => {
+    //     //console.log(data.data.image_url);
+    //     document.getElementById('dog').setAttribute('src', data.data.image_url);
+    //     return this._realRevenue.GetAnimalGif_2('cat');
+    //   }
+    // )
+    // .then(
+    //   (data) => {
+    //     document.getElementById('cat').setAttribute('src', data.data.image_url);
+    //     return this._realRevenue.GetAnimalGif_2('pig');
+    //   }
+    // )
+    // .then(
+    //   (data) => {
+    //     document.getElementById('pig').setAttribute('src', data.data.image_url);
+    //     //return this._realRevenue.GetAnimalGif_2('pig');
+    //   }
+    // )
+
+    //PromiseAll
+    // const tmp = Promise.all([
+    //   this._realRevenue.GetAnimalGif_2('dog').then(
+    //     (data) => {
+    //       //console.log(data.data.image_url);
+    //       document.getElementById('dog').setAttribute('src', data.data.image_url);
+    //     }
+    //   ),
+    //   this._realRevenue.GetAnimalGif_2('cat').then(
+    //     (data) => {
+    //       //console.log(data.data.image_url);
+    //       document.getElementById('cat').setAttribute('src', data.data.image_url);
+    //     }
+    //   ),
+    //   this._realRevenue.GetAnimalGif_2('pig').then(
+    //     (data) => {
+    //       //console.log(data.data.image_url);
+    //       document.getElementById('pig').setAttribute('src', data.data.image_url);
+    //     }
+    //   )
+    // ]);
+    // this._realRevenue.GetAnimalGif_2('dog').then(
+    //   (data) => {
+    //     //console.log(data.data.image_url);
+    //     document.getElementById('dog').setAttribute('src', data.data.image_url);
+    //   }
+    // );
+    // this._realRevenue.GetAnimalGif_2('cat').then(
+    //   (data) => {
+    //     //console.log(data.data.image_url);
+    //     document.getElementById('cat').setAttribute('src', data.data.image_url);
+    //   }
+    // );
+    // this._realRevenue.GetAnimalGif_2('pig').then(
+    //   (data) => {
+    //     //console.log(data.data.image_url);
+    //     document.getElementById('pig').setAttribute('src', data.data.image_url);
+    //   }
+    // )
+
+    // Async / Await
+    // console.log("Url before");
+    // const url = await this._realRevenue.GetAnimalGif_3('dog');
+    // console.log("Url after" + url.data.image_url);
+    // console.log("Url after");
+    // document.getElementById('dog').setAttribute('src', url.data.image_url);
+    // console.log("Url end" + url.data.image_url);
+    // const url_2 = await this._realRevenue.GetAnimalGif_3('cat');
+    // console.log("url_2 after" + url_2.data.image_url);
+    // console.log("url_2 after");
+    // document.getElementById('cat').setAttribute('src', url_2.data.image_url);
+    // console.log("url_2 end" + url_2.data.image_url);
+    // const url_3 = await this._realRevenue.GetAnimalGif_3('pig');
+    // console.log("url_3 after" + url_3.data.image_url);
+    // console.log("url_3 after");
+    // document.getElementById('pig').setAttribute('src', url_3.data.image_url);
+    // console.log("url_3 end" + url_3.data.image_url);
+    // this.logInfo();
+
+    // Async/Await Promise.All()
+      // this._realRevenue.GetAnimalGif_3('dog').then((url) => {
+      //   document.getElementById('dog').setAttribute('src', url.data.image_url);
+      //   console.log("inline1");
+      // })
+      // this.AsyncFunc();
+      // this._realRevenue.GetAnimalGif_3('cat').then((url) => {
+      //   document.getElementById('cat').setAttribute('src', url.data.image_url);
+      //   console.log("inline2");
+      // })
+      // this._realRevenue.GetAnimalGif_3('pig').then((url) => {
+      //   document.getElementById('pig').setAttribute('src', url.data.image_url);
+      //   console.log("inline3");
+      // })
+      console.log("NamDDD_5")
+      let tmp1 = this.randomImg('dog');
+      console.log('dog running');
+      let tmp2 = this.randomImg('cat');
+      console.log(tmp1);
+      console.log(tmp2);
+      console.log('cat running');
+      await Promise.all([
+        tmp1, tmp2
+      ]);
+      console.log(tmp1);
+      console.log(tmp2);
+      alert("Complete!");
+      //this.execute();
+  }
+
+  public async setTimeOut(time){
+    return new Promise((resolve) => {
+      setTimeout(resolve, time);
+    })
+  }
+  async execute() {
+    //let t = await this.findResult().then((data) => {console.log(data)});
+    console.log(await this.findResult());
+    console.log("NamDD is the best!");
+  }
+  
+  async findResult() {
+    for(var i = 0; i < 100000; i++) {
+      var j = 100
+    }
+  
+    console.log('before findResult')
+    var tmp;
+    //await db.collection('hospitals').findOne({name: '医療法人神甲会隈病院'})
+    var result = await this._realRevenue.GetAnimalGif_3('dog').then((url) => {
+        document.getElementById('dog').setAttribute('src', url.data.image_url);
+        console.log("inline1");
+        tmp = url.data.image_url;
+      })
+    console.log('after findResult')
+    return 10;
+  }
+
+  public async randomImg(tag){
+    for(let i = 0; i < 3;i++){
+      await this._realRevenue.GetAnimalGif_3(tag).then((url) => {
+        document.getElementById(tag).setAttribute('src', url.data.image_url);
+        console.log("In randomImg " + i);
+      })
+      setTimeout(() => {console.log("STT : " + i)}, (i+1)*2000);
+    }
+  }
+
+  public async AsyncFunc(){
+    await this._realRevenue.GetAnimalGif_3('pig').then((url) => {
+      document.getElementById('pig').setAttribute('src', url.data.image_url);
+      console.log("inline asyncFunc");
+    }); 
+  }
+
   public years: string[] = ["2018", "2019", "2020"];
   public months: string[] = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
   public chiNhanh: string[] = ["Hà Nội"];
@@ -555,15 +857,25 @@ export class MainViewComponent implements OnInit {
     }
     // Recent year data
     // polar chart
+
     await this.getSumRecentYear(inputFilter);
+    console.log('Hi 1');
     await this.getSumInPlanRevenue(inputFilter);
+    console.log('Hi 2');
     await this.getSumLastYear(inputFilter);
+    console.log('Hi 3');
     await this.GetTopTenProductsWithTitle(inputFilter);
+    console.log('Hi 4');
     await this.GetTopTenStoresWithTitle(inputFilter);
+    console.log('Hi 5');
     await this.GetCountedOrders(inputFilter);
+    console.log('Hi 6');
     await this.GetCountedCustomers(inputFilter);
+    console.log('Hi 7');
     await this.GetSumGroupByChannel(inputFilter, 1);
+    console.log('Hi 8');
     await this.getSpecificStoresWithTitle(inputFilter, this.polarAreaChart, 1);
+    console.log('Hi 9');
 
     let inputFilter_2 = {};
 
@@ -582,7 +894,7 @@ export class MainViewComponent implements OnInit {
     console.log("InputFilter data");
     console.log(inputFilter);
     console.log(inputFilter_2);
-    
+
   }
 
   public async getSumRecentYear(inputFilter) {
@@ -629,7 +941,7 @@ export class MainViewComponent implements OnInit {
   }
 
   public async getSumInPlanRevenue(inputFilter) {
-    
+
     await this._realRevenue.GetSumInPlanRevenue(inputFilter, (status, data) => {
       if (status) {
         console.log(data);
